@@ -52,12 +52,11 @@ const userSchema = new Schema(
 // will not use arrow function here as arrow don't have this context
 // cryptography also take time so func should be async
 // as this is middleware, next is also require so that it can be passed to next
-userSchema.pre("save", async function (next) {
+userSchema.pre("save", async function () {
   // If user update password then only run this hash otherwise don't run it all the time
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password")) return;
 
   this.password = await bcrypt.hash(this.password, 10);
-  next();
 });
 
 // Add custom functions to schema
